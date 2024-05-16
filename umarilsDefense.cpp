@@ -1,4 +1,7 @@
 #include<iostream>
+#include<stdlib>
+#include<math.h>
+#include<cmath>
 
 using namespace std;
 
