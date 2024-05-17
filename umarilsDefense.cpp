@@ -31,32 +31,62 @@ int main () {
     int i = 0; //contador de canones
     int j = 0; //contador de Objetivos
 
-    //Primera Etapa - ENTRADA DE DATOS: Numero de Canones
-
-    cout<< "Introduce el numero de canones:" << endl; //Segun las instrucciones esto no deberia ir
+    //---Primera Etapa - ENTRADA DE DATOS: Numero de Canones---
     cin>> numeroDeCanones ; cout << endl;
 
-    // Segunda Etapa - For Loop para cada canon
-
-    for (i; i <= numeroDeCanones; i++) {
-
-        //Segunda Etapa, Inciso 1 - Entrada de la configuracion de cada canon
-
-        cin>> posicionX ; cin>> posicionY; //Entrada de la Posicion Inicial del cañon
-
-        cin>> Vo ; cin>> theta;            // Entrada de la Velocidad Inicial y el Angulo con la horizontal
-
-        //Segunda Etapa, Inciso 2 - Definicion de objetivos del canon actual y su respectivo For Loop
-
-        cin >> numeroDeObjetivos;
-
-        for (j; j <= numeroDeObjetivos; j++) {
-
-            cin>> posicionXObj ; cin >> posicionYObj; // Entrada de la posicion del objetivo actual
-
-        }
-        
+    //Validacion del Numero de Canones
+    if (numeroDeCanones <= 0 || numeroDeCanones > 26) {
+        cout << "Datos de entrada invalidos";
     }
-    
+
+    else {
+        
+        //---Segunda Etapa - For Loop para cada canon---
+        for (i; i <= numeroDeCanones; i++) {
+
+            //Entrada de la configuracion de cada canon
+            cin>> posicionX ; cin>> posicionY; //Entrada de la Posicion Inicial del cañon
+
+            // Validacion de la posicion del canon
+            if ( posicionY < 0 || posicionY > 50){
+                cout << "Datos de entrada invalidos";
+                break;
+            }
+
+            else {
+                
+                cin>> Vo ; cin>> theta;  // Entrada de la Velocidad Inicial y el Angulo con la horizontal
+
+                //Validacion Velocidad Maxima y angulo de disparo
+                if (Vo <= 0 || Vo > 500 || theta > 180 || theta < 0) {
+                    cout << "Datos de entrada invalidos";
+                    break;
+                }
+                else {
+
+                    //Definicion de objetivos del canon actual y su respectivo For Loop
+                    cin >> numeroDeObjetivos;
+
+                    // For Loop de cada objetivo
+                    for (j; j <= numeroDeObjetivos; j++) {
+
+                        cin>> posicionXObj ; cin >> posicionYObj; // Entrada de la posicion del objetivo actual
+
+                        //Validacion de la posicion del objetivo
+                        if (posicionYObj < 0) {
+                            cout << "Datos de entrada invalidos";
+                            break;
+                        }
+
+                        else {
+                            
+
+                        }
+                    }   
+                }
+            }
+        }    
+    }
+
     return 0;
 }
