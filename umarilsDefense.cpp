@@ -60,6 +60,8 @@ int main()
         //---Segunda Etapa - For Loop para cada canon---
         for (i; i < numeroDeCanones; i++)
         {
+
+            // Letra que identifica al cañon
             IDcanon = char(i + 65);
 
             // Entrada de la configuracion de cada canon
@@ -109,6 +111,9 @@ int main()
                     // For Loop de cada objetivo
                     for (j; j < numeroDeObjetivos; j++)
                     {
+                        // Identificador del objetivo
+                        IDobj = j + 1;
+
                         cin >> posicionXObj;
                         cin >> posicionYObj; // Entrada de la posicion del objetivo actual
 
@@ -138,7 +143,7 @@ int main()
                             tiempoImpacto = redondear_num((posicionXObj) / (Vo * cos(thetaRadian)));
 
                             // // Salida destrucción de los objetivos
-                            cout << "Objetivo " << j + 1 << " destruido por el canon " << IDcanon << " en " << tiempoImpacto << " segundos." << endl;
+                            cout << "Objetivo " << IDobj << " destruido por el canon " << IDcanon << " en " << tiempoImpacto << " segundos." << endl;
                         }
                     }
                     j = 0;
