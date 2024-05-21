@@ -5,6 +5,13 @@
 
 using namespace std;
 
+// Función para redondear numeros
+int redondear_num(float num)
+{
+
+    return float(num - floor(num)) < 0.5 ? floor(num) : ceil(num);
+};
+
 int main()
 {
 
@@ -23,9 +30,9 @@ int main()
     float thetaRadian = 0;
 
     // Referentes a la bala
-    int alturaMax = 0;
-    int tiempoVuelo = 0;
-    float tiempoImpacto = 0.0;
+    float alturaMax = 0;
+    float tiempoVuelo = 0;
+    int tiempoImpacto = 0;
 
     // Referentes al Objetivo
     int numeroDeObjetivos = 0;
@@ -38,7 +45,6 @@ int main()
     int j = 0; // contador de Objetivos
 
     //---Primera Etapa - ENTRADA DE DATOS: Numero de Canones---
-    cout << "Ingresa el numero de canones ";
     cin >> numeroDeCanones;
     cout << endl;
 
@@ -55,8 +61,8 @@ int main()
         for (i; i < numeroDeCanones; i++)
         {
             IDcanon = char(i + 65);
+
             // Entrada de la configuracion de cada canon
-            cout << "Ingresa las coordenadas del canon ";
             cin >> posicionX;
             cin >> posicionY; // Entrada de la Posicion Inicial del cañon
 
@@ -69,9 +75,9 @@ int main()
 
             else
             {
-                cout << "Ingresa la velocidad inicial y el angulo con la horizontal ";
+                // Entrada de la Velocidad Inicial y el Angulo con la horizontal
                 cin >> Vo;
-                cin >> theta; // Entrada de la Velocidad Inicial y el Angulo con la horizontal
+                cin >> theta;
 
                 // Validacion Velocidad Maxima y angulo de disparo
                 if (Vo <= 0 || Vo > 500 || theta > 180 || theta < 0)
@@ -86,10 +92,10 @@ int main()
                     thetaRadian = theta * M_PI / 180;
 
                     // Calculo de Altura Maxima
-                    alturaMax = ceil((pow(Vo, 2) * pow(sin(thetaRadian), 2)) / (2 * gravedad));
+                    alturaMax = redondear_num((pow(Vo, 2) * pow(sin(thetaRadian), 2)) / (2 * gravedad));
 
                     // Calculo del tiempo de vuelo
-                    tiempoVuelo = ceil((2 * Vo * sin(thetaRadian)) / gravedad);
+                    tiempoVuelo = redondear_num((2 * Vo * sin(thetaRadian)) / gravedad);
 
                     // // Salida altura maxima de los proyectiles
                     cout << "Los proyectiles del canon " << IDcanon << " subiran hasta " << alturaMax << " metros antes de comenzar a caer. ";
@@ -98,23 +104,28 @@ int main()
                     cout << "Estos impactaran contra el suelo pasados " << tiempoVuelo << " segundos luego de ser disparados." << endl;
 
                     // Definicion de objetivos del canon actual y su respectivo For Loop
-                    cout << "Ingresa el numero de objetivos ";
                     cin >> numeroDeObjetivos;
 
                     // For Loop de cada objetivo
                     for (j; j < numeroDeObjetivos; j++)
                     {
-                        cout << "Ingresa las coordenadas del objetivo ";
                         cin >> posicionXObj;
                         cin >> posicionYObj; // Entrada de la posicion del objetivo actual
 
                         // Validacion de la posicion del objetivo
-                        if (posicionYObj < 0)
+                        if (posicionYObj == posicionY && posicionXObj == posicionX)
                         {
-                            cout << "Datos de entrada invalidos ";
+                            cout << "Canon destruido";
                             break;
                         }
-
+                        else if (posicionXObj < 0)
+                        {
+                            cout << "Posicion comprometida";
+                        }
+                        else if (posicionYObj == posicionY)
+                        {
+                            cout << "Enemigos en las murallas";
+                        }
                         else
                         {
                             // VALIDACION DE CASOS ESPECIALES
@@ -123,16 +134,14 @@ int main()
 
                             // ETAPA 3 - ENTRADAS VALIDAS; CALCULO DE FORMULAS FISICAS
 
-                            //(Vo * sin(thetaRadian) + sqrt(pow(Vo, 2) * pow(sin(thetaRadian), 2) + (2 * gravedad * posicionY))) / gravedad;
-
                             // Calculo del Tiempo de Impacto
-                            tiempoImpacto = (posicionXObj) / (Vo * cos(thetaRadian));
+                            tiempoImpacto = redondear_num((posicionXObj) / (Vo * cos(thetaRadian)));
 
-                            // Impresion de Salidas
-
-                            //(CARLOS)
+                            // // Salida destrucción de los objetivos
+                            cout << "Objetivo " << j + 1 << " destruido por el canon " << IDcanon << " en " << tiempoImpacto << " segundos." << endl;
                         }
                     }
+                    j = 0;
                 }
             }
         }
