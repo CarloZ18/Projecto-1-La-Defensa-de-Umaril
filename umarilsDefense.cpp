@@ -19,8 +19,6 @@ int main()
 
     // Referentes al ambiente
 
-
-    
     float gravedad = 9.81;
 
     // Referentes al canon
@@ -31,7 +29,7 @@ int main()
     int Vo = 0;
     int theta = 0;
     float thetaRadian = 0;
-
+    float radianTheta = 0;
     // Referentes a la bala
     float alturaMax = 0;
     float tiempoVuelo = 0;
@@ -96,6 +94,8 @@ int main()
                     // Conversion de Theta a Radianes para uso de Seno / Coseno
                     thetaRadian = theta * M_PI / 180;
 
+                    radianTheta = thetaRadian * 180 / M_PI;
+
                     // Calculo de Altura Maxima
                     alturaMax = redondear_num((pow(Vo, 2) * pow(sin(thetaRadian), 2)) / (2 * gravedad));
 
@@ -138,7 +138,14 @@ int main()
                         {
                             // VALIDACION DE CASOS ESPECIALES
 
-                            //(ANGEL)
+                            int distMax;
+                            distMax = pow(Vo, 2) * sin(2 * thetaRadian) / gravedad;
+                            float thetaRadian2;
+                            int nuevoAngulo = asin(posicionXObj * gravedad / pow(Vo, 2)) / 2;
+                            if (distMax < posicionXObj)
+                            {
+                                cout << "Reajuste de " << nuevoAngulo << " grados en el canon " << IDcanon << endl;
+                            }
 
                             // ETAPA 3 - ENTRADAS VALIDAS; CALCULO DE FORMULAS FISICAS
 
