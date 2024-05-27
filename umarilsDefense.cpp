@@ -18,6 +18,9 @@ int main()
     //---Declaración de Variables Principales---
 
     // Referentes al ambiente
+
+
+    
     float gravedad = 9.81;
 
     // Referentes al canon
