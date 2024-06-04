@@ -5,12 +5,48 @@
 
 using namespace std;
 
+float gravedad = 9.81;
+
 // Función para redondear numeros
 int redondear_num(float num)
 {
 
-    return float(num - floor(num)) < 0.5 ? floor(num) : ceil(num);
+    return float(num - floor(num)) >= 0.5 ? round(num) : floor(num);
 };
+
+// Función para pasar de radianes a angulos
+int de_radian_a_angulo(int radian)
+{
+    return radian * 180 / M_PI;
+}
+
+// Ajustar el ángulo del cañón
+int calcular_angulo(int Vo, int distancia)
+{
+    int discriminante = pow(Vo, 4) - (gravedad * (gravedad * pow(distancia, 2)));
+    if (discriminante < 0)
+    {
+        // No hay ángulo que nos permita alcanzar al objetivo
+        return -1;
+    }
+
+    int angulo1 = atan((pow(Vo, 2) + sqrt(discriminante)) / (gravedad * distancia));
+    int angulo2 = atan((pow(Vo, 2) - sqrt(discriminante)) / (gravedad * distancia));
+
+    // Convertir ángulos a grados
+    angulo1 = de_radian_a_angulo(angulo1) / 2;
+    angulo2 = de_radian_a_angulo(angulo2) / 2;
+
+    // Elegir el ángulo positivo más cercano al ángulo original
+    if (angulo1 >= 0 && angulo1 <= 90)
+    {
+        return angulo1;
+    }
+    else
+    {
+        return angulo2;
+    }
+}
 
 int main()
 {
@@ -18,8 +54,6 @@ int main()
     //---Declaración de Variables Principales---
 
     // Referentes al ambiente
-
-    float gravedad = 9.81;
 
     // Referentes al canon
     int numeroDeCanones = 0;
@@ -29,7 +63,6 @@ int main()
     int Vo = 0;
     int theta = 0;
     float thetaRadian = 0;
-    float radianTheta = 0;
     // Referentes a la bala
     float alturaMax = 0;
     float tiempoVuelo = 0;
@@ -94,8 +127,6 @@ int main()
                     // Conversion de Theta a Radianes para uso de Seno / Coseno
                     thetaRadian = theta * M_PI / 180;
 
-                    radianTheta = thetaRadian * 180 / M_PI;
-
                     // Calculo de Altura Maxima
                     alturaMax = redondear_num((pow(Vo, 2) * pow(sin(thetaRadian), 2)) / (2 * gravedad));
 
@@ -120,35 +151,33 @@ int main()
                         cin >> posicionXObj;
                         cin >> posicionYObj; // Entrada de la posicion del objetivo actual
 
+                        int distMax;
+                        distMax = pow(Vo, 2) * sin(2 * thetaRadian) / gravedad;
+
                         // Validacion de la posicion del objetivo
                         if (posicionYObj == posicionY && posicionXObj == posicionX)
                         {
                             cout << "Canon destruido";
                             break;
                         }
-                        else if (posicionXObj < 0)
+                        else if ((posicionXObj < posicionX && theta < 90) || (posicionXObj > posicionX && theta > 90))
                         {
-                            cout << "Posicion comprometida";
+                            cout << "Posicion Comprometida";
                         }
-                        else if (posicionYObj == posicionY)
+                        else if ((posicionXObj == posicionX) && (posicionYObj != posicionY))
                         {
                             cout << "Enemigos en las murallas";
                         }
-                        else
+                        else if (distMax < posicionXObj)
                         {
                             // VALIDACION DE CASOS ESPECIALES
 
-                            int distMax;
-                            distMax = pow(Vo, 2) * sin(2 * thetaRadian) / gravedad;
-                            float thetaRadian2;
-                            int nuevoAngulo = asin(posicionXObj * gravedad / pow(Vo, 2)) / 2;
-                            if (distMax < posicionXObj)
-                            {
-                                cout << "Reajuste de " << nuevoAngulo << " grados en el canon " << IDcanon << endl;
-                            }
+                            int nuevoAngulo = calcular_angulo(Vo, distMax);
 
-                            // ETAPA 3 - ENTRADAS VALIDAS; CALCULO DE FORMULAS FISICAS
-
+                            cout << "Reajuste de " << nuevoAngulo << " grados requeridos en el canon " << IDcanon << endl;
+                        }
+                        else
+                        {
                             // Calculo del Tiempo de Impacto
                             tiempoImpacto = redondear_num((posicionXObj) / (Vo * cos(thetaRadian)));
 
