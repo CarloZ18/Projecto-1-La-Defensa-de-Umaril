@@ -133,7 +133,7 @@ int main()
                     break;
                 }
                 // Validación cuando es un lanzamiento horizontal
-                else if (theta == 0 || theta == 180)
+                else if (Vo * sin(thetaRadian)==0 && theta==0 ||Vo * sin(thetaRadian) ==0 && theta==180)
                 {
                     tiempoVuelo = redondear_num(((2 * posicionY) / gravedad));
                     distMax = posicionX + (Vo * tiempoVuelo);
